@@ -1,0 +1,78 @@
+/* color game */
+
+body{
+	background-color: #232323;
+	color: white;
+	font-family: Helvetica;
+	margin: 0px;
+}
+
+h1{
+	text-align: center;
+	text-transform: uppercase;
+	font-weight: 300;
+}
+
+
+button{
+	border:none;
+	background:none;
+	text-transform: uppercase;
+	height: 100%;
+	font-weight: 700;
+	color: steelblue;
+	font-size: inherit;
+	transition: all 0.3s;
+	-webkit-transition: background 0.3s;
+	-moz-transition: background 0.3s;	
+	outline: none;
+}
+
+#message{
+	display: inline-block;
+	width: 20%;
+}
+
+#container{
+	max-width: 600px;
+	margin: 15px auto;
+}
+
+.square{
+	width: 30%;
+	background: purple;
+	padding-bottom: 30%;
+	margin: 1.66%;
+	float: left;
+	border-radius: 15%;
+	transition: background 0.5s;
+	-webkit-transition: background 0.5s;
+	-moz-transition: background 0.5s;
+}
+
+#colorDisplay{
+	font-size: 2.0em;
+}
+
+#topbanner{
+	background-color: steelblue;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+#stripe{
+	background-color: white;
+	height: 30px;
+	text-align: center;
+	color: black;
+}
+
+.selected{
+	background: steelblue;
+	color: white;
+}
+
+button:hover{
+	color: white;
+	background: steelblue;
+}
