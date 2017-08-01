@@ -1,0 +1,1 @@
+A basic Slack /slash command that returns the current weather at the location of the submitted zip code.

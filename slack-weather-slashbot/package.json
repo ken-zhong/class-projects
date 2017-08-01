@@ -1,0 +1,16 @@
+{
+  "name": "basic-slack-slash-command",
+  "version": "1.0.0",
+  "description": "A basic Slack /slash command that returns the current weather at the location of the submitted zip code.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "request": "^2.81.0"
+  }
+}
