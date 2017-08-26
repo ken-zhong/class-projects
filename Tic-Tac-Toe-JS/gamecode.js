@@ -107,6 +107,16 @@ class Board {
     return false
   }
 
+  transposeGrid(){
+    let grid = this.grid
+    let result = grid[0].map((col, i)=>{
+      return grid.map((row)=>{
+        return row[i]
+      })
+    })
+    return result
+  }
+
 }
 
 class HumanPlayer {
@@ -141,8 +151,82 @@ class AIPlayer{
   }
 
   getMove(){
-    let move = this.getRandomMove()
+    var move
+    if(this.getWinningMove("O")){
+      move = this.getWinningMove("O")
+    } else if(this.getWinningMove("X")){
+      move = this.getWinningMove("X")
+    } else{
+      move = this.getRandomMove()
+    }
     this.board.updateBoard(move, this.mark)
+  }
+
+  getWinningMove(mark){
+    let grid = this.board.grid
+    let tGrid = this.board.transposeGrid()
+    //check columns
+    for(let i = 0; i<3; i++){
+      let count = grid[i].reduce((sum, el)=>{
+        if(el === mark){
+          return sum += 1
+        } else {
+          return sum
+        }
+      }, 0)
+      if(count === 2 && grid[i].indexOf("") >= 0 ){
+        let x = grid[i].indexOf("")
+        return [x, i]
+      }
+    }
+
+    for(let i = 0; i<3; i++){
+      let count = tGrid[i].reduce((sum, el)=>{
+        if(el === mark){
+          return sum += 1
+        } else {
+          return sum
+        }
+      }, 0)
+      if(count === 2 && tGrid[i].indexOf("") >= 0 ){
+        let y = tGrid[i].indexOf("")
+        return [i, y]
+      }
+    }
+    if(this.checkDiags(mark)){
+      return this.checkDiags(mark)
+    }
+    return false
+  }
+
+  checkDiags(mark){
+    let grid = this.board.grid
+    let diag1 = [[0, 0],[1, 1],[2, 2]]
+    let d1Marks = [grid[0][0], grid[1][1], grid[2][2]]
+    let diag2 = [[2, 0],[1, 1],[0, 2]]
+    let d2Marks = [grid[0][2], grid[1][1], grid[2][0]]
+
+    let count = d1Marks.reduce((sum, el)=>{
+      if(el === mark){
+        return sum += 1
+      } else {
+        return sum
+      }
+    }, 0)
+    if(count === 2 && d1Marks.indexOf("") >= 0){
+      return diag1[d1Marks.indexOf("")]
+    }
+    count = d2Marks.reduce((sum, el)=>{
+      if(el === mark){
+        return sum += 1
+      } else {
+        return sum
+      }
+    }, 0)
+    if(count === 2 && d2Marks.indexOf("") >= 0){
+      return diag2[d2Marks.indexOf("")]
+    }
+    return false
   }
 
   getRandomMove(){
