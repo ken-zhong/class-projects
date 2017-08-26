@@ -2,17 +2,30 @@
 <html>
   <head>
     <meta charset="utf-8">
-
     <style media="screen">
+      * {
+        font-family: Courier;
+      }
       h1 {
         text-align: center
       }
-
       table {
         margin: 0 auto;
         border-collapse: collapse;
       }
+      tr:nth-of-type(1) {
+        border-bottom: solid 1px black;
+      }
 
+      tr:nth-of-type(2) {
+        border-bottom: solid 1px black;
+      }
+      tr > td:nth-child(1) {
+        border-right: solid 1px black;
+      }
+      tr > td:nth-child(2) {
+        border-right: solid 1px black;
+      }
       td {
         /*border: solid 1px black;*/
         margin: 0;
@@ -21,48 +34,169 @@
         text-align: center;
         font-size: 40px;
       }
-
-      tr:nth-of-type(1) {
-        border-bottom: solid 1px black;
-      }
-
-      tr:nth-of-type(2) {
-        border-bottom: solid 1px black;
-      }
-
     </style>
-
     <title>Tic Tac Toe</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   </head>
   <body>
     <h1>Tic Tac Toe</h1>
-
     <table>
       <tr>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td class="grid" id="00"></td>
+        <td class="grid" id="01"></td>
+        <td class="grid" id="02"></td>
       </tr>
       <tr>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td class="grid" id="10"></td>
+        <td class="grid" id="11"></td>
+        <td class="grid" id="12"></td>
       </tr>
       <tr>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td class="grid" id="20"></td>
+        <td class="grid" id="21"></td>
+        <td class="grid" id="22"></td>
       </tr>
     </table>
-
-
-    <div class="text-box">
-
-    </div>
-
+    <div class="game-text"></div>
   </body>
 
   <script type="text/javascript">
+    class Game {
+      constructor(board, p1, p2){
+        this.board = board,
+        this.p1 = p1
+        this.p2 = p2
+        board.game = this
+        this.currentPlayer = p1
+      }
+
+      switchPlayers(){
+        if(this.currentPlayer === this.p1){
+          this.currentPlayer = this.p2
+        } else {
+          this.currentPlayer = this.p1
+        }
+      }
+
+      playTurn(mark){
+        if(mark === "X"){
+          let player = this.p2
+          setTimeout(()=>{ player.getMove() }, 1000)
+        } else {
+          this.p1.getMove()
+        }
+      }
+    }
+
+    class Board {
+      constructor(){
+        this.grid = [
+          ["", "", ""],
+          ["", "", ""],
+          ["", "", ""]
+        ]
+      }
+
+      placeMark(move, mark){
+        let grid = this.grid
+        let x = move[0]
+        let y = move[1]
+        grid[y][x] = mark
+      }
+
+      updateBoard(move, mark){
+        this.placeMark(move, mark)
+        let y = move[0].toString()
+        let x = move[1].toString()
+        let id = "#"+x+y
+        $(id).text(mark)
+        if(this.over() === true){
+
+        } else {
+          this.game.playTurn(mark)
+        }
+      }
+
+      over(){
+        let full = true
+        let grid = this.grid
+        grid.forEach(row, ()=>{
+          row.forEach(el, ()=>{
+            if(el === ""){
+              full = false
+            }
+          })
+        })
+        if(full === true){
+          return true
+        }
+        return false
+      }
+    }
+
+    class HumanPlayer {
+      constructor(board){
+        this.mark = "X"
+        this.board = board
+      }
+      getMove(){
+        let move = []
+        let board = this.board
+        let mark = this.mark
+        $(".grid").each(function(){
+          $(this).on("click", ()=>{
+            let id = $(this).attr("id")
+            let y = parseInt(id[0])
+            let x = parseInt(id[1])
+            if($("#"+id).text() === ""){
+              move = [x, y]
+              console.log(id)
+              board.updateBoard(move, mark)
+              $(".grid").off()
+            }
+          })
+        })
+      }
+    }
+
+    class AIPlayer{
+      constructor(board){
+        this.board = board
+        this.mark = "O"
+      }
+
+      getMove(){
+        let move = this.getRandomMove()
+        this.board.updateBoard(move, this.mark)
+      }
+
+      getRandomMove(){
+        let grid = this.board.grid
+        let possibleMoves = []
+        grid.forEach((row, y)=>{
+          row.forEach((el, x)=>{
+            if(el === "" ){
+              possibleMoves.push([x, y])
+            }
+          })
+        })
+        return possibleMoves[Math.floor(Math.random()*possibleMoves.length)]
+      }
+    }
+
+    $(document).on("load", function(){
+      var board = new Board()
+      var bob = new AIPlayer(board)
+      var hum = new HumanPlayer(board)
+      var game = new Game(board, hum, bob)
+      game.playTurn()
+    })
+
+    var board = new Board()
+    var bob = new AIPlayer(board)
+    var hum = new HumanPlayer(board)
+    var game = new Game(board, hum, bob)
+    game.playTurn()
 
   </script>
 </html>
