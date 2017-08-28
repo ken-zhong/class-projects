@@ -1,1 +1,1 @@
-A repository for various projects from programming courses and tutorials. Stored here as a backup. 
+A repository for various simple projects from programming courses, tutorials, or just messing around. Stored here as a backup.
