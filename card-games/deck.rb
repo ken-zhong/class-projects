@@ -8,7 +8,6 @@ class Deck
     @deck = []
     @drawn_cards = []
     populate_deck
-    shuffle
   end
 
   # !!!! DON'T USE THE POP METHOD ON @deck IN GAMES! USE DEAL_ONE or DEAL_CARDS
@@ -33,7 +32,7 @@ class Deck
   end
 
   def shuffle
-    @deck.shuffle
+    @deck = @deck.shuffle
   end
 
   def populate_deck
@@ -53,7 +52,7 @@ end
 class Card
   attr_reader :name, :val, :suit
 
-  @STRING_DIC = {
+  @@STRING_DIC = {
     1 => "Ace",
     11 => "Jack",
     12 => "Queen",
@@ -68,7 +67,7 @@ class Card
 
   def get_name
     if @val == 1 || @val > 10
-      @name = "#{@STRING_DIC[val]} of #{@suit}"
+      @name = "#{@@STRING_DIC[val]} of #{@suit}"
     else
       @name = "#{@val} of #{@suit}"
     end

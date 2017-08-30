@@ -1,5 +1,5 @@
-require relative "deck"
-require "byebug"
+require_relative "deck"
+# require "byebug"
 
 # RULES: players start with a hand of 7 and try to discard by matching the
 # revealed card's number or suit. 8s are wild, and can be placed anytime.
@@ -7,7 +7,7 @@ require "byebug"
 
 class Game
   attr_accessor :deck, :player1, :player2, :discard_pile
-  def initialize(p1, p1)
+  def initialize(p1, p2)
     @deck = Deck.new
     @discard_pile = []
     @player1 = p1
@@ -28,6 +28,8 @@ class Game
       break if over?
       play_turn(player2)
     end
+
+    puts "game over!"
   end
 
   def over?
@@ -42,11 +44,12 @@ class Game
   end
 
   def play_turn(player)
-    # should either get a card to discard, a request to draw, or a break flag
+    # should either get a card to discard, a request to draw
     play = player.get_play(revealed_card)
     case play
     when :draw
       player.hand << deck.deal_one
+      play_turn(player)
     when :pass
       #pass do nothing??
     when Card
@@ -55,7 +58,6 @@ class Game
     else
       raise "error"
     end
-
   end
 
   def revealed_card
@@ -64,11 +66,9 @@ class Game
 
   def display
     puts "Your opponent has #{player2.hand.count} cards in hand."
-
   end
 
 end
-
 
 class Player
   attr_accessor :hand, :name
@@ -81,15 +81,15 @@ class Player
     @deck = deck
   end
 
-  def get_play(revealed_card)
-    #should return a card, or a request to draw a card, or pass
-    if @deck.empty?
-      puts "The deck is empty now! (D)raw a card, choose (#) a card to to discard, or (P)ass:"
-    else {
-      puts "(D)raw a card, or choose (#) a card to to discard:"
-      input = gets.chomp
-    }
-  end
+  # def get_play(revealed_card)
+  #   #should return a card, or a request to draw a card, or pass
+  #   if @deck.empty?
+  #     puts "The deck is empty now! (D)raw a card, choose (#) a card to to discard, or (P)ass:"
+  #   else
+  #     puts "(D)raw a card, or choose (#) a card to to discard:"
+  #     input = gets.chomp
+  #   end
+  # end
 
   def valid_play?(card, revealed_card)
     return true if card.val == 8
@@ -111,7 +111,6 @@ class Player
   end
 
 end
-
 
 class PlayerAI
 
@@ -134,12 +133,13 @@ class PlayerAI
     if @deck.empty?
       return valid_plays.sample unless valid_plays.empty?
       return :pass
-    else {
+    else
       if hand.empty? || valid_plays.empty?
         return :draw
       else
         return valid_plays.sample
       end
+    end
   end
 
   def valid_play?(card, revealed_card)
@@ -156,11 +156,11 @@ class PlayerAI
   end
 
   def display_hand
-    display = "Your current hand: "
-    hand.each_with_index { |card, idx| display << "#{idx+1}" }
-    puts display_hand
+    display = "#{name}'s hand: "
+    hand.each_with_index { |card, idx| display << " #{idx+1}) #{card.name} " }
+    puts display
   end
 end
 
-game = Game.new(PlayerAI.new, PlayerAI.new)
+game = Game.new(PlayerAI.new("Robot_1"), PlayerAI.new("Robot_2"))
 game.play
