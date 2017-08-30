@@ -24,6 +24,7 @@ class Game
 
     # the play loop
     until over?
+      puts "The revealed card is: #{revealed_card.name}"
       play_turn(player1)
       break if over?
       play_turn(player2)
@@ -51,7 +52,7 @@ class Game
       player.hand << deck.deal_one
       play_turn(player)
     when :pass
-      #pass do nothing??
+      #pass do nothing
     when Card
       player.hand.delete(play)
       discard_pile << play
