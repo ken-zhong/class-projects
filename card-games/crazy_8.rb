@@ -114,12 +114,12 @@ class Player
   def get_play(revealed_card)
     #should return a card, or a request to draw a card, or pass
     if @deck.empty?
-      puts "The deck is empty now! (D)raw a card, choose (#) a card to to discard, or (P)ass:"
+      puts "The deck is empty now! Choose (#) a card to to discard, or (P)ass:"
     else
       puts "(D)raw a card, or choose (#) a card to to discard:"
     end
     input = gets.chomp.downcase
-    if input == "d"
+    if input == "d" && !@deck.empty?
       return :draw
     elsif input == "p" && @deck.empty?
       return :pass
@@ -136,7 +136,6 @@ class Player
     end
 
   end
-
 
   def valid_play?(card, revealed_card)
     return true if card.val == 8
@@ -159,7 +158,6 @@ class Player
 end
 
 class PlayerAI
-
   attr_accessor :hand, :name
   def initialize(name="I am Robot")
     @name = name

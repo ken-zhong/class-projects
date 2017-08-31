@@ -47,6 +47,7 @@ class Deck
 
   def reset_deck
     deck += drawn_cards
+    shuffle
   end
 end
 
