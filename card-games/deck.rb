@@ -45,6 +45,10 @@ class Deck
     deck.empty?
   end
 
+  def reset_deck
+    deck = deck.concatonate
+  end
+
 end
 
 

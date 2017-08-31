@@ -1,5 +1,5 @@
 require_relative "deck"
-# require "byebug"
+# require 'byebug'
 
 # RULES: players start with a hand of 7 and try to discard by matching the
 # revealed card's number or suit. 8s are wild, and can be placed anytime.
@@ -24,20 +24,20 @@ class Game
 
     # the play loop
     until over?
-      puts "The revealed card is: #{revealed_card.name}"
+      display_top
       play_turn(player1)
       break if over?
       play_turn(player2)
     end
-
-    puts "game over!"
+    winner = get_winner
+    puts "Game over! The winner is: #{winner.name}"
   end
 
   def over?
     return false unless deck.empty?
     if player1.hand.empty? || player2.hand.empty?
       return true
-    elsif player1.possible_play? || player2.possible_play?
+    elsif player1.possible_play?(revealed_card) || player2.possible_play?(revealed_card)
       return false
     else
       return true
@@ -46,6 +46,7 @@ class Game
 
   def play_turn(player)
     # should either get a card to discard, a request to draw
+    player.display_hand if player.instance_of? Player
     play = player.get_play(revealed_card)
     case play
     when :draw
@@ -57,7 +58,29 @@ class Game
       player.hand.delete(play)
       discard_pile << play
     else
-      raise "error"
+      raise "error this shouldn't get hit"
+    end
+  end
+
+  def get_winner
+    return player1 if player1.hand.empty?
+    return player2 if player2.hand.empty?
+
+    p1_points = get_points(player1.hand)
+    p2_points = get_points(player2.hand)
+
+    p1_points > p2_points ? player1 : player2
+  end
+
+  def get_points(hand)
+    hand.reduce(0) do |sum, card|
+      if card.val == 8
+        sum + 50
+      elsif card.val <= 13 && card.val >= 11
+        sum + 10
+      else
+        sum + card.val
+      end
     end
   end
 
@@ -65,8 +88,14 @@ class Game
     @discard_pile.last
   end
 
-  def display
+  def display_top
+    sleep 0.2
+    puts "***************************************"
+    puts "The top card is: #{revealed_card.name}"
+    puts "***************************************"
+    sleep 0.2
     puts "Your opponent has #{player2.hand.count} cards in hand."
+    puts "There is #{deck.deck.length} cards remaining in the deck."
   end
 
 end
@@ -82,15 +111,32 @@ class Player
     @deck = deck
   end
 
-  # def get_play(revealed_card)
-  #   #should return a card, or a request to draw a card, or pass
-  #   if @deck.empty?
-  #     puts "The deck is empty now! (D)raw a card, choose (#) a card to to discard, or (P)ass:"
-  #   else
-  #     puts "(D)raw a card, or choose (#) a card to to discard:"
-  #     input = gets.chomp
-  #   end
-  # end
+  def get_play(revealed_card)
+    #should return a card, or a request to draw a card, or pass
+    if @deck.empty?
+      puts "The deck is empty now! (D)raw a card, choose (#) a card to to discard, or (P)ass:"
+    else
+      puts "(D)raw a card, or choose (#) a card to to discard:"
+    end
+    input = gets.chomp.downcase
+    if input == "d"
+      return :draw
+    elsif input == "p" && @deck.empty?
+      return :pass
+    else
+      idx = input.to_i - 1
+      if (0..hand.length).include?(idx)
+        return hand[idx] if valid_play?(hand[idx], revealed_card)
+        puts "Invalid move. Please try again!"
+        get_play(revealed_card)
+      else
+        puts "Invalid move. Please try again!"
+        get_play(revealed_card)
+      end
+    end
+
+  end
+
 
   def valid_play?(card, revealed_card)
     return true if card.val == 8
@@ -106,11 +152,10 @@ class Player
   end
 
   def display_hand
-    display = "Your current hand: "
-    hand.each_with_index { |card, idx| display << "#{idx+1}" }
-    puts display_hand
+    display = "Your hand: "
+    hand.each_with_index { |card, idx| display << "#{idx+1}) #{card.name} " }
+    puts display
   end
-
 end
 
 class PlayerAI
@@ -127,8 +172,6 @@ class PlayerAI
 
   def get_play(revealed_card)
     #should return a card, or a request to draw a card, or pass
-    display_hand
-    sleep 0.6
     valid_plays = hand.select { |card| valid_play?(card, revealed_card) }
 
     if @deck.empty?
@@ -163,5 +206,7 @@ class PlayerAI
   end
 end
 
-game = Game.new(PlayerAI.new("Robot_1"), PlayerAI.new("Robot_2"))
-game.play
+# game = Game.new(Player.new("Hu-mon"), PlayerAI.new("Do I have a soul?"))
+# game.play
+ai_game = Game.new(PlayerAI.new("Robot_1"), PlayerAI.new("Robot_2"))
+ai_game.play
