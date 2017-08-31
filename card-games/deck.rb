@@ -46,9 +46,8 @@ class Deck
   end
 
   def reset_deck
-    deck = deck.concatonate
+    deck += drawn_cards
   end
-
 end
 
 
