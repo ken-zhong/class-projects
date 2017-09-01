@@ -65,7 +65,7 @@ class Game
   def get_winner
     return player1 if player1.hand.empty?
     return player2 if player2.hand.empty?
-    get_points(player1.hand) > get_points(player2.hand) ? player1 : player2
+    get_points(player1.hand) < get_points(player2.hand) ? player1 : player2
   end
 
   def get_points(hand)
