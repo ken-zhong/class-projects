@@ -58,18 +58,14 @@ class Game
       player.hand.delete(play)
       discard_pile << play
     else
-      raise "error this shouldn't get hit"
+      raise "error bad return from player.get_play"
     end
   end
 
   def get_winner
     return player1 if player1.hand.empty?
     return player2 if player2.hand.empty?
-
-    p1_points = get_points(player1.hand)
-    p2_points = get_points(player2.hand)
-
-    p1_points > p2_points ? player1 : player2
+    get_points(player1.hand) > get_points(player2.hand) ? player1 : player2
   end
 
   def get_points(hand)
@@ -127,12 +123,9 @@ class Player
       idx = input.to_i - 1
       if (0..hand.length).include?(idx)
         return hand[idx] if valid_play?(hand[idx], revealed_card)
-        puts "Invalid move. Please try again!"
-        get_play(revealed_card)
-      else
-        puts "Invalid move. Please try again!"
-        get_play(revealed_card)
       end
+      puts "Invalid move. Please try again!"
+      get_play(revealed_card)
     end
 
   end
@@ -204,7 +197,9 @@ class PlayerAI
   end
 end
 
-# game = Game.new(Player.new("Hu-mon"), PlayerAI.new("Do I have a soul?"))
-# game.play
-ai_game = Game.new(PlayerAI.new("Robot_1"), PlayerAI.new("Robot_2"))
-ai_game.play
+if $PROGRAM_NAME == __FILE__
+  game = Game.new(Player.new("Hu-mon"), PlayerAI.new("Do I have a soul?"))
+  game.play
+  # ai_game = Game.new(PlayerAI.new("Robot_1"), PlayerAI.new("Robot_2"))
+  # ai_game.play
+end
