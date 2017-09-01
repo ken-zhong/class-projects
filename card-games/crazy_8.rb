@@ -144,27 +144,16 @@ class Player
   end
 
   def display_hand
-    display = "Your hand: "
+    display = "#{name}'s hand: "
     hand.each_with_index { |card, idx| display << "#{idx+1}) #{card.name} " }
     puts display
   end
 end
 
-class PlayerAI
-  attr_accessor :hand, :name
-  def initialize(name="I am Robot")
-    @name = name
-    @hand = []
-  end
-
-  def get_deck(deck)
-    @deck = deck
-  end
-
+class PlayerAI < Player
   def get_play(revealed_card)
     #should return a card, or a request to draw a card, or pass
     valid_plays = hand.select { |card| valid_play?(card, revealed_card) }
-
     if @deck.empty?
       return valid_plays.sample unless valid_plays.empty?
       return :pass
@@ -176,30 +165,11 @@ class PlayerAI
       end
     end
   end
-
-  def valid_play?(card, revealed_card)
-    return true if card.val == 8
-    card.suit == revealed_card.suit || card.val == revealed_card.val
-  end
-
-  def possible_play?(revealed_card)
-    if hand.any? { |card| card.val == 8}
-      return true
-    else
-      return hand.any? { |card| card.suit == revealed_card.suit } || hand.any? { |card| card.val == revealed_card.val }
-    end
-  end
-
-  def display_hand
-    display = "#{name}'s hand: "
-    hand.each_with_index { |card, idx| display << " #{idx+1}) #{card.name} " }
-    puts display
-  end
 end
 
 if $PROGRAM_NAME == __FILE__
-  game = Game.new(Player.new("Hu-mon"), PlayerAI.new("Do I have a soul?"))
-  game.play
-  # ai_game = Game.new(PlayerAI.new("Robot_1"), PlayerAI.new("Robot_2"))
-  # ai_game.play
+  # game = Game.new(Player.new("Hu-mon"), PlayerAI.new("Do I have a soul?"))
+  # game.play
+  ai_game = Game.new(PlayerAI.new("Robot_1"), PlayerAI.new("Robot_2"))
+  ai_game.play
 end
