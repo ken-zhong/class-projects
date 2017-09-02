@@ -27,12 +27,12 @@ tr > td:nth-child(2) {
 }
 
 td {
-  /*border: solid 1px black;*/
   margin: 0;
   width: 100px;
   height: 100px;
   text-align: center;
   font-size: 40px;
+  font-weight: bold;
 }
 
 #bottom-text {
