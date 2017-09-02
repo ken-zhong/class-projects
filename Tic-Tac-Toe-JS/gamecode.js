@@ -76,36 +76,23 @@ class Board {
   }
 
   checkWinner(){
-    //check the three horizontals first
-    let grid = this.grid
-    for(let x = 0; x < 3; x++){
-        if(grid[x][0] === grid[x][1] && grid[x][1] === grid[x][2]){
-          if(grid[x][0] !== ""){
-            return grid[x][0] //returns the mark of the winner
-          }
+    // returns winning mark if there's a winner, otherwise return false
+    let horizontals = this.grid
+    let verticals = this.transposeGrid()
+    let diags = [[grid[0][0], grid[1][1], grid[2][2]], [grid[0][2], grid[1][1], grid[2][0]]]
+    let checkGrid = horizontals.concat(verticals, diags)
+
+    for(let i = 0; i < checkGrid.length; i++){
+      let row = checkGrid[i]
+      if(row[1] === row[2] && row[2] == row[0]){
+        if(row[1]){
+          return row[1]
         }
-    }
-    //now check the 3 verticals
-    for(let y = 0; y < 3; y++){
-        if(grid[0][y] === grid[1][y] && grid[1][y] === grid[2][y]){
-          if(grid[0][y] !== ""){
-            return grid[0][y] //returns the mark of the winner
-          }
-        }
-    }
-    //now check the diagonals
-    if(grid[0][0]===grid[1][1] && grid[1][1]===grid[2][2]){
-        if(grid[1][1] !== ""){
-          return grid[1][1]
-        }
-    }else if(grid[0][2] === grid[1][1] && grid[1][1]===grid[2][0]){
-      if(grid[1][1] !== ""){
-        return grid[1][1]
       }
     }
-    // returns false otherwise
     return false
   }
+
 
   transposeGrid(){
     let grid = this.grid
