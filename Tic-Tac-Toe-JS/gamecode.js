@@ -166,7 +166,6 @@ class AIPlayer{
         return [x, i]
       }
     }
-
     for(let i = 0; i<3; i++){
       let count = tGrid[i].reduce((sum, el)=>{
         if(el === mark){
