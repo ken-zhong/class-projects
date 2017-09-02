@@ -77,10 +77,10 @@ class Board {
 
   checkWinner(){
     // returns winning mark if there's a winner, otherwise return false
-    let horizontals = this.grid
+    let grid = this.grid
     let verticals = this.transposeGrid()
     let diags = [[grid[0][0], grid[1][1], grid[2][2]], [grid[0][2], grid[1][1], grid[2][0]]]
-    let checkGrid = horizontals.concat(verticals, diags)
+    let checkGrid = grid.concat(verticals, diags)
 
     for(let i = 0; i < checkGrid.length; i++){
       let row = checkGrid[i]
