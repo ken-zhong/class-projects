@@ -7,25 +7,22 @@ def quick_sort(array)
 end
 
 def merge_sort(array)
-  arr = array.dup
-  idx = arr/
-  left
-
+  return array if array.length < 2
+  mid = array.length/2
+  left, right = merge_sort(array[0...mid]), merge_sort(array[mid..-1])
+  merge(left, right)
 end
 
-def insertion_sort(array)
-  arr = array.dup
-  result = [arr.shift]
-  until arr.empty?
-    el = arr.shift
-    idx = result.length - 1
-    while el < result[idx]
-      idx -= 1
-      break if idx < 0
+def merge(left, right)
+  result = []
+  until left.empty? || right.empty?
+    if left[0] < right[0]
+      result << left.shift
+    else
+      result << right.shift
     end
-    result.insert(idx+1, el)
   end
-  result
+  result + left + right
 end
 
 def bubble_sort(array)
@@ -41,6 +38,21 @@ def bubble_sort(array)
     end
   end
   arr
+end
+
+def insertion_sort(array)
+  arr = array.dup
+  result = [arr.shift]
+  until arr.empty?
+    el = arr.shift
+    idx = result.length - 1
+    while el < result[idx]
+      idx -= 1
+      break if idx < 0
+    end
+    result.insert(idx+1, el)
+  end
+  result
 end
 
 a = [7,2,5,8,1,11,45,-32]
