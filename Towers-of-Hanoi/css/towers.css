@@ -37,20 +37,18 @@ li {
   margin-top: 5px;
   background-color: grey;
   border-radius: 15px;
+  height: 40px;
 }
 
 .disc1 {
   width: 50px;
-  height: 25px;
 
 }
 .disc2 {
   width: 100px;
-  height: 25px;
 }
 .disc3 {
   width: 160px;
-  height: 25px;
 }
 
 .selected {
