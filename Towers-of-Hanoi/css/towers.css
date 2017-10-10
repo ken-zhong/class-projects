@@ -1,0 +1,66 @@
+body {
+  width: 800px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+.hanoi {
+  margin: 0 auto;
+  width: 630px;
+  display: flex;
+}
+
+ul {
+  display: flex;
+  flex-direction: column-reverse;
+  width: 200px;
+  border-bottom: solid 5px black;
+  margin: 5px;
+  list-style: none;
+  padding: 0;
+  padding-bottom: 5px;
+  height: 200px;
+}
+
+ul:hover{
+  border-color: blue;
+  cursor: pointer;
+}
+
+li {
+  padding: 0;
+  display: flex;
+  margin: 0 auto;
+  margin-top: 5px;
+  background-color: grey;
+  border-radius: 15px;
+}
+
+.disc1 {
+  width: 50px;
+  height: 25px;
+
+}
+.disc2 {
+  width: 100px;
+  height: 25px;
+}
+.disc3 {
+  width: 160px;
+  height: 25px;
+}
+
+.selected {
+  border-color: red;
+}
+
+.selected:hover {
+  border-color: red;
+}
+
+.winner {
+  background-color: green;
+}
